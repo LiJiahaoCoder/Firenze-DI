@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>Firenze DI 教程</title>
+</head>
+<body>
+  <h1>Firenze DI</h1>
+  <p><i>DI</i> 是一种让我们能够更加优雅地创建对象和对象依赖的一种模式。</p>
+
+  <section class="example">
+    <h2>1. Container</h2>
+
+    <p>通过 <code>FContainer</code> 可以管理需要注入的类， 比如有一个类
+      <code class="function" data-action="initializeCar">Car</code>：
+    </p>
+    <pre><code>
+      public class Car {
+        public Car() {}
+      }
+    </code></pre>
+
+    <p class="function" data-action="registerCar">
+      通过 <code>FContainer</code> 的 <code>register()</code> 方法可以将其注册到容器中：
+    </p>
+    <pre><code>
+      FContainer container = new FContainer();
+      container.register(Car.class);
+    </code></pre>
+
+    <p>然后通过 <code>getInstance()</code> 方法即可拿到
+      <code class="assertion" data-expect="equal" data-action="getRegisteredCarClass">
+        Car
+      </code>
+      类对应的实例：
+    </p>
+    <pre><code>
+      Car car = container.getInstance(Car.class);
+    </code></pre>
+
+    <p>如果你尝试在容器中获取一个没有注册的类，那么容器会抛出异常：</p>
+    <samp>Error: NotExisted class is not registered in the container.</samp>
+  </section>
+</body>
+</html>
