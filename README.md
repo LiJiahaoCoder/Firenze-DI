@@ -157,8 +157,16 @@ public class Car {
   public Brand brand;
   
   @Inject
-  public Car(@Singleton Brand brand) {
+  public Car(Brand brand) {
     this.brand = brand;
+  }
+}
+
+@Singleton
+public class Brand {
+  String name;
+  public Brand(String name) {
+    this.name = name;
   }
 }
 ```

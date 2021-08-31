@@ -1,8 +1,7 @@
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
-public class Container {
+public class FContainer {
   private final Set<Class<?>> registeredClasses = new HashSet<>();
 
   public void register(Class<?> clazz) {

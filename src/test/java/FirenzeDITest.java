@@ -3,11 +3,11 @@ import models.Car;
 
 @FuShengTest
 public class FirenzeDITest {
-  private Container container;
+  private FContainer container;
   private Car car;
 
   public FirenzeDITest() {
-    this.container = new Container();
+    this.container = new FContainer();
   }
 
   public void initializeCar() {
