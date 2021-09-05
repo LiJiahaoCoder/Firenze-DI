@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+group 'com.jiahao'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testImplementation 'io.github.thxno:fusheng-runner:1.0'
+
+    implementation 'com.google.guava:guava:30.0-jre'
+}
+
+test {
+    useJUnitPlatform()
+}
