@@ -1,6 +1,6 @@
 # Firenze DI
 
-*DI* 是一种让我们能够更加优雅地创建对象和对象依赖的一种模式。
+*DI* 是一种让我们能够更加优雅地创建和管理对象以及对象依赖的一种模式。
 
 ## Container
 
@@ -19,64 +19,107 @@ FContainer container = new FContainer();
 container.register(Car.class);
 ```
 
-然后通过 `getInstance()` 方法即可拿到 `Car` 类对应的实例：
+此时 `Car` 类就已经被 `FContainer` 所管理了，然后当我们想获取 `Car` 类的实例时，我们
+不必再使用 `Car car = new Car()` 的形式来实例化，而是可以直接通过 `FContainer` 的 
+`getInstance()` 方法即可拿到 `Car` 类对应的实例：
 
 ```java
 Car car = container.getInstance(Car.class);
 ```
 
-如果你尝试在容器中获取一个没有注册的类，那么容器会抛出异常：
+如果传递给 `FContainer` 的 `getInstance()` 方法的是某个 `interface`，那么 
+`getInstance()` 方法会返回该接口的所有实现类的实例，比如 `BMW` 和 `Benz` 都是
+基于 `interface Car` 的实现类：
 
 ```java
-container.getInstance(NotExisted.class);
-// Error: NotExisted class is not registered in the container
+public interface Car {
+  String getName();
+}
+
+public class BMW implements Car {
+  private static final String name = "BMW";
+
+  public String getName() {
+    return name;
+  }
+}
+
+public class Benz implements Car {
+  private static final String name = "Benz";
+
+  public String getName() {
+    return name;
+  }
+}
+```
+
+则当使用 `getInstance()` 方法获取已经在容器中注册过的 `Car.class` 时，可以得到所
+有 `interface Car` 的实现类的实例：
+
+```java
+List<Car> carsList = getInstance(Car.class);
+```
+
+但如果尝试在容器中拿到一个没有注册的类的实例，那么容器会抛出异常：
+
+```java
+container.getInstance(Bike.class);
+// Error: Bike is not registered in the container
 ```
 
 ## @Inject
 
-用来标识可注入的 *构造器*，比如：
+`@Inject` 可用来标识可注入的 *构造器*，比如：
 
 ```java
 public class Car {
-  public Engine engine;
+  private Engine engine;
   
   @Inject
   public Car(Engine engine) {
     this.engine = engine;
   }
+
+  public Engine getEngine() {
+    return engine;
+  }
 }
 ```
 
-通过上述方式标注 `Car` 构造函数后，`Engine` 也会对应注册到容器中。 
+通过上述方式对 `Car` 构造函数标注上 `@Inject` 后，`Engine` 类也会注册到容器中去。
 从容器中获取 `Car` 的实例时，`Engine` 也会被对应的实例化：
 
 ```java
 container.register(Car.class);
 Car car = container.getInstance(Car.class);
-assertEquals(car.engine.class, Engine.class);
+assertEquals(car.getEngine().class, Engine.class);
 ```
 
 如果你尝试不使用 `@Inject` 在容器中注册带有参数的构造函数的类的话，容器会抛出异常：
 
 ```java
 public class Car {
-  public Engine engine;
+  private Engine engine;
   
   public Car(Engine engine) {
     this.engine = engine;
   }
+
+  public Engine getEngine() {
+    return engine;
+  }
 }
 
 container.register(Car.class);
-// Error: Car class cannot be registered in container
+// Error: Car cannot be registered in container
 ```
 
 如果你在有多个重载构造函数的类中使用 `@Inject` 注解，那么容器也会抛出异常：
 
 ```java
 public class Car {
-  public Engine engine;
-  public Seat seat;
+  private Engine engine;
+  private Seat seat;
   
   @Inject
   public Car(Engine engine) {
@@ -87,23 +130,35 @@ public class Car {
   public Car(Seat seat) {
     this.seat = seat;
   }
+
+  public Engine getEngine() {
+    return engine;
+  }
+
+  public Seat getSeat() {
+    return seat;
+  }
 }
 
 container.register(Car.class);
-// Error: Cannot register the Car class which has multiple constructor methods
+// Error: Cannot register the Car which has multiple constructor methods
 ```
 
 ## @Qualifier
 
-通过 `@Qualifier` 可以指明具体地实现类，比如：
+通过 `@Qualifier` 注解，可以指明具体地实现类，比如：
 
 ```java
-class Car {
-  public Engine engine;
+public class Car {
+  private Engine engine;
   
   @Inject
   public Car(@V8 Engine engine) {
     this.engine = engine;
+  }
+  
+  public Engine getEngine() {
+    return engine;
   }
 }
 
@@ -111,7 +166,6 @@ class Car {
 public class V8Engine implements Engine {
   private final String name = "V8";
 
-  @Override
   public String getName() {
     return name;
   }
@@ -123,25 +177,38 @@ public class V8Engine implements Engine {
 public @interface V8 {}
 ```
 
+在上面的例子中，我们定义了 `@V8` 注解，并使用 `@V8` 标注了实现类以及要注入的地方，这样
+在调用 `Car` 的 `getEngine()` 时，就能得到正确的 `Engine` 了：
+
+```java
+Car car =  getInstance(Car.class);
+Engine engine = car.getEngine();
+engine.getName(); // Output: V8
+```
+
 ## @Named
 
-通过 `@Named` 可以指明具体地实现类，比如：
+该注解功能与 `@Qualifier` 类似，通过 `@Named` 注解可以以字符串的形式指明具体地实
+现类，比如：
 
 ```java
 public class Car {
-  public Engine engine;
+  private Engine engine;
   
   @Inject
   public Car(@Named("V12") Engine engine) {
     this.engine = engine;
   }
+  
+  public Engine getEngine() {
+    return engine;
+  }
 }
 
 @Named("V12")
-public class V8Engine implements Engine {
+public class V12Engine implements Engine {
   private final String name = "V12";
 
-  @Override
   public String getName() {
     return name;
   }
@@ -150,23 +217,31 @@ public class V8Engine implements Engine {
 
 ## @Singleton
 
-使用 `@Singleton` 标注的实现类在整个应用中只会存在一个实例，比如：
+使用 `@Singleton` 标注的实现类，在整个应用中只会存在一个实例，比如：
 
 ```java
 public class Car {
-  public Brand brand;
+  private Brand brand;
   
   @Inject
   public Car(Brand brand) {
     this.brand = brand;
   }
+  
+  public Brand getBrand() {
+    return brand;
+  }
 }
 
 @Singleton
 public class Brand {
-  String name;
-  public Brand(String name) {
-    this.name = name;
+  private static final String name = "Audi";
+
+  public Brand() {
+  }
+  
+  public String getName() {
+    return name;
   }
 }
 ```
