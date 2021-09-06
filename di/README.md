@@ -4,7 +4,7 @@
 
 ## Container
 
-通过 `FContainer` 可以管理需要注入的类，比如有一个类 `Car`：
+通过 `com.jiahao.di.FContainer` 可以管理需要注入的类，比如有一个类 `Car`：
 
 ```java
 public class Car {
@@ -12,22 +12,22 @@ public class Car {
 }
 ```
 
-通过 `FContainer` 的 `register()` 方法可以将其注册到容器中：
+通过 `com.jiahao.di.FContainer` 的 `register()` 方法可以将其注册到容器中：
 
 ```java
-FContainer container = new FContainer();
+com.jiahao.di.FContainer container = new com.jiahao.di.FContainer();
 container.register(Car.class);
 ```
 
-此时 `Car` 类就已经被 `FContainer` 所管理了，然后当我们想获取 `Car` 类的实例时，我们
-不必再使用 `Car car = new Car()` 的形式来实例化，而是可以直接通过 `FContainer` 的 
+此时 `Car` 类就已经被 `com.jiahao.di.FContainer` 所管理了，然后当我们想获取 `Car` 类的实例时，我们
+不必再使用 `Car car = new Car()` 的形式来实例化，而是可以直接通过 `com.jiahao.di.FContainer` 的 
 `getInstance()` 方法即可拿到 `Car` 类对应的实例：
 
 ```java
 Car car = container.getInstance(Car.class);
 ```
 
-如果想获取所有 `interface` 的实现类，则需先将对应 `interface` 注册到容器中，然后使用 `FContainer`
+如果想获取所有 `interface` 的实现类，则需先将对应 `interface` 注册到容器中，然后使用 `com.jiahao.di.FContainer`
 的 `getInstances()` 方法 ，将相应 `interface` 传递给该方法，则 `getInstances()` 方法会返回该
 接口的所有实现类的实例， 比如 `BMW` 和 `Benz` 都是基于 `interface Car` 的实现类：
 

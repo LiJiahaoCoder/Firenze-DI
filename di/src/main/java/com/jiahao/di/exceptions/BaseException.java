@@ -1,4 +1,4 @@
-package exceptions;
+package com.jiahao.di.exceptions;
 
 public class BaseException extends RuntimeException {
   private final String message;

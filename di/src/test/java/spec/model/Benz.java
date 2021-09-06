@@ -1,6 +1,6 @@
-package model;
+package spec.model;
 
-public class Benz implements ICar{
+public class Benz implements ICar {
   private static final String name = "Benz";
 
   @Override

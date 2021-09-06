@@ -6,13 +6,20 @@
 </head>
 <body>
   <h1>Firenze DI</h1>
-  <p><i>DI</i> 是一种让我们能够更加优雅地创建和管理对象以及对象依赖的一种模式。</p>
+  <p>
+    <i>DI</i> 是一种让我们能够更加优雅地创建和管理对象以及对象依赖的一种模式，什么是 <i>DI</i> 可参考 <i>Martin Fowler</i> 文章
+    <a href="https://martinfowler.com/articles/injection.html" target="_blank">
+      <i>
+        《Inversion of Control Containers and the Dependency Injection pattern》
+      </i>
+    </a>。
+  </p>
 
   <section class="example" data-name="Container documentation">
     <h2>1. Container</h2>
 
     <h3>I. 基本使用</h3>
-    <p>通过 <code>FContainer</code> 可以管理需要注入的类， 比如有一个类 <code>Car</code>：</p>
+    <p>通过 <code>FContainer</code> 可以管理需要注入的类， 比如有一个类 <code class="variable" data-name="className">Car</code>：</p>
     <pre>
       <code>
       public class Car {
@@ -21,8 +28,9 @@
       </code>
     </pre>
 
-    <p class="function" data-action="registerCar">
-      通过 <code>FContainer</code> 的 <code>register()</code> 方法可以将其注册到容器中：
+    <p>
+      通过 <code>FContainer</code> 的 <code>register()</code> 方法可以将 <code>Car</code>
+      <span class="function" data-action="registerClass" data-params="className">注册到容器中：</span>
     </p>
     <pre>
       <code>
@@ -33,24 +41,15 @@
 
     <p>
       此时 <code>Car</code> 类就已经被 <code>FContainer</code> 所管理了，然后我们想获取
-      <code>Car</code> 类实例时，我们不必再使用
-      <code>Car car = new Car()</code> 的形式来实例化，而是可以直接通过
+      <code>Car</code> 类实例时，我们不必再使用<code>Car car = new Car()</code> 的形式来实例化，而是可以直接通过
       <code>FContainer</code> 的 <code>getInstance()</code> 方法即可拿到
-      <code class="assertion" data-expect="equal" data-action="getRegisteredCarClass">
-        Car
-      </code>
-      类对应的实例：
+      <code class="assertion" data-expect="equal" data-action="getClassName" data-params="className">Car</code>类对应的实例：
     </p>
-    <pre>
-      <code>
-      Car car = container.getInstance(Car.class);
-      </code>
-    </pre>
+    <pre><code>Car car = container.getInstance(Car.class);</code></pre>
 
-    <p>
+    <!-- <p>
       如果想获取所有 <code>interface</code> 的实现类，则需先将对应 <code>interface</code>
-      <span class="function" data-action="initializeICar">注册到容器中，</span>
-      然后使用 <code>FContainer</code> 的 <code>getInstances()</code> 方法，将相应
+      <span>注册到容器中，</span>然后使用 <code>FContainer</code> 的 <code>getInstances()</code> 方法，将相应
       <code>interface</code> 传递给该方法，则 <code>getInstances()</code> 方法会返回该接口的
       所有实现类的实例，比如 <code>BMW</code> 和 <code>Benz</code> 都是基于
       <code>interface Car</code> 的实现类：
@@ -93,7 +92,7 @@
     <p>
       此时拿到的 <code>carsList</code> 列表的长度应为 <i>2</i>，因为其中包含 <code>BMW</code>
       和 <code>Benz</code> 两个类的实例。
-      <!-- <i class="assertion" data-expect="equal" data-action="getInstancesCountOfICar">2</i>
+      <i class="assertion" data-expect="equal" data-action="getInstancesCountOfICar">2</i>
 
       <code class="function" data-action="containsClassInCarsList" data-params="className">BMW</code>
 
@@ -102,10 +101,10 @@
 
     <h3>II. 异常处理</h3>
     <p>但如果你尝试在容器中获取一个没有注册的类，那么容器会抛出异常：</p>
-    <pre><code>container.getInstance(Bike.class);</code></pre>
+    <pre><code>container.getInstance(<span class="variable" data-name="className">Bike</span>.class);</code></pre>
     <samp>
       Error:
-      <span class="assertion" data-expect="equal" data-action="getUnregisteredBikeClass">
+      <span class="assertion" data-expect="equal" data-action="getInstance" data-params="className">
         Bike is not registered in the container.
       </span>
     </samp>
@@ -119,11 +118,11 @@
     </p>
     <pre>
       <code>
-        public class Car {
+        public class CarWithInjectedEngine {
           private Engine engine;
 
           @Inject
-          public Car(Engine engine) {
+          public CarWithInjectedEngine(Engine engine) {
             this.engine = engine;
           }
 
@@ -135,28 +134,33 @@
     </pre>
 
     <p>
-      通过上述方式对 <code>Car</code> 构造函数标注上 <code>@Inject</code> 后，
-      <code>Engine</code> 类也会注册到容器中去。从容器中获取 <code>Car</code>
+      通过上述方式对 <code>CarWithInjectedEngine</code> 构造函数标注上 <code>@Inject</code> 后，
+      <code>Engine</code> 类也会注册到容器中去。从容器中获取 <code>CarWithInjectedEngine</code>
       的实例时，<code>Engine</code> 也会被对应的实例化：
     </p>
     <pre>
       <code>
-        container.register(Car.class);
-        Car car = container.getInstance(Car.class);
-        assertEquals(car.getEngine(), Engine.class);
+        <span class="function" data-action="registerClass" data-params="carWithInjectedEngine">
+          container.register(<span class="variable" data-name="carWithInjectedEngine">CarWithInjectedEngine</span>.class);
+        </span>
+        <span class="function" data-action="registerClass" data-params="engine">
+          container.register(<span class="variable" data-name="engine">Engine</span>.class);
+        </span>
+        CarWithInjectedEngine car = container.getInstance(CarWithInjectedEngine.class);
+        assertEquals(car.getEngine(), <span class="assertion" data-expect="equal" data-action="getInjectedEngineClassName">Engine</span>.class);
       </code>
     </pre>
 
-    <p>
+    <!-- <p>
       如果你尝试不使用 <code>@Inject</code> 在容器中注册带有参数的构造函数的类的话，容器会
       抛出异常：
     </p>
     <pre>
       <code>
-        public class Car {
+        public class CarWithoutInjectedEngine {
           private Engine engine;
 
-          public Car(Engine engine) {
+          public CarWithoutInjectedEngine(Engine engine) {
             this.engine = engine;
           }
 
@@ -165,8 +169,8 @@
           }
         }
 
-        container.register(Car.class);
-        // Error: Car cannot be registered in container
+        container.register(CarWithoutInjectedEngine.class);
+        // Error: CarWithoutInjectedEngine cannot be registered in container
       </code>
     </pre>
 
@@ -201,7 +205,7 @@
         container.register(Car.class);
         // Error: Cannot register the Car which has multiple constructor methods
       </code>
-    </pre>
+    </pre> -->
   </section>
 
   <section class="example">
