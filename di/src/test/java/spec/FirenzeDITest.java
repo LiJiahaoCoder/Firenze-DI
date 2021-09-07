@@ -3,6 +3,7 @@ package spec;
 import com.jiahao.di.FContainer;
 import com.thoughtworks.fusheng.integration.junit5.FuShengTest;
 import spec.model.CarWithInjectedEngine;
+import spec.model.CarWithV12Engine;
 import spec.model.CarWithV8Engine;
 import spec.utils.Utils;
 
@@ -37,6 +38,11 @@ public class FirenzeDITest {
 
   public String getNameOfCarWithV8Engine() {
     CarWithV8Engine car = container.getInstance(CarWithV8Engine.class);
+    return car.getEngine().getName();
+  }
+
+  public String getNameOfCarWithV12Engine() {
+    CarWithV12Engine car = container.getInstance(CarWithV12Engine.class);
     return car.getEngine().getName();
   }
 }

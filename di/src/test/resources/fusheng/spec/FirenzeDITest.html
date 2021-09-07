@@ -110,7 +110,7 @@
     </samp>
   </section>
 
-  <section class="example">
+  <section class="example" data-name="@Inject documentation">
     <h2>@Inject</h2>
 
     <p>
@@ -208,7 +208,7 @@
     </pre> -->
   </section>
 
-  <section class="example">
+  <section class="example" data-name="@Qualifier documentation">
     <h2>@Qualifier</h2>
 
     <p>通过 <code>@Qualifier</code> 注解，可以指明具体地实现类，比如：</p>
@@ -257,7 +257,7 @@
     </pre>
   </section>
 
-  <section class="example">
+  <section class="example" data-name="@Named documentation">
     <h2>@Named</h2>
 
     <p>
@@ -266,27 +266,40 @@
     </p>
     <pre>
       <code>
-        public class Car {
-          private Engine engine;
+        <span class="function" data-action="registerClass" data-params="className">public class <span class="variable" data-name="className">CarWithV12Engine</span> {</span>
+          <span class="function" data-action="registerClass" data-params="className">private <span class="variable" data-name="className">IEngine</span> engine;</span>
 
           @Inject
-          public Car(@Named("V12") Engine engine) {
+          public CarWithV12Engine(@Named("V12") IEngine engine) {
             this.engine = engine;
           }
 
-          public Engine getEngine() {
+          public IEngine getEngine() {
             return engine;
           }
         }
 
         @Named("V12")
-        public class V12Engine implements Engine {
+        <span class="function" data-action="registerClass" data-params="className">public class <span class="variable" data-name="className">V12Engine</span> implements IEngine {</span>
           private final String name = "V12";
 
           public String getName() {
             return name;
           }
         }
+      </code>
+    </pre>
+
+    <p>
+      在上面的例子中，我们定义类 <code>@Named("V12")</code> 注解，并使用了 <code>@Named("V12")</code> 标注了实现
+      类以及要注入的地方，这样在调用 <code>CarWithV12Engine</code> 的 <code>getEngine()</code> 时，就
+      能得到正确的 <code>IEngine</code> 了：
+    </p>
+    <pre>
+      <code>
+        CarWithV12Engine car = getInstance(CarWithV12Engine.class);
+        IEngine engine = car.getEngine();
+        engine.getName(); // Output: <span class="assertion" data-expect="equal" data-action="getNameOfCarWithV12Engine">V12</span>
       </code>
     </pre>
   </section>
