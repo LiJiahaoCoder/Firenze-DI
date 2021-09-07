@@ -53,7 +53,7 @@ public class FContainer {
     guard.start(clazz);
 
     List<Object> params = Arrays.stream(constructor.getParameters())
-            .map(annotation -> Resolver.resolveRealClass(annotation, registeredClasses))
+            .map(annotation -> Resolver.resolveClass(annotation, registeredClasses))
             .map(this::getInstance)
             .collect(Collectors.toList());
 

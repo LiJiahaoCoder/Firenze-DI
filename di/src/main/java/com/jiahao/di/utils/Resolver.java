@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import static java.util.Objects.nonNull;
 
 public class Resolver {
-  public static Class<?> resolveRealClass(Parameter parameter, Collection<Class<?>> classes) {
+  public static Class<?> resolveClass(Parameter parameter, Collection<Class<?>> classes) {
     Class<?> type = parameter.getType();
 
     if (!type.isInterface()) {

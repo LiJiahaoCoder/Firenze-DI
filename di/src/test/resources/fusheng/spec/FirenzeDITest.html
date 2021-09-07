@@ -214,21 +214,21 @@
     <p>通过 <code>@Qualifier</code> 注解，可以指明具体地实现类，比如：</p>
     <pre>
       <code>
-        public class Car {
-          private Engine engine;
+        <span class="function" data-action="registerClass" data-params="className">public class <span class="variable" data-name="className">CarWithV8Engine</span> {</span>
+          <span class="function" data-action="registerClass" data-params="className">private <span class="variable" data-name="className">IEngine</span> engine;</span>
 
           @Inject
-          public Car(@V8 Engine engine) {
+          public CarWithV8Engine(@V8 IEngine engine) {
             this.engine = engine;
           }
 
-          public Engine getEngine() {
+          public IEngine getEngine() {
             return engine;
           }
         }
 
         @V8
-        public class V8Engine implements Engine {
+        <span class="function" data-action="registerClass" data-params="className">public class <span class="variable" data-name="className">V8Engine</span> implements IEngine {</span>
           private final String name = "V8";
 
           public String getName() {
@@ -237,7 +237,7 @@
         }
 
         @Documented
-        @Retention(RUNTIME)
+        @Retention(RetentionPolicy.RUNTIME)
         @Qualifier
         public @interface V8 {}
       </code>
@@ -245,14 +245,14 @@
 
     <p>
       在上面的例子中，我们定义类 <code>V8</code> 注解，并使用了 <code>@V8</code> 标注了实现
-      类以及要注入的地方，这样在调用 <code>Car</code> 的 <code>getEngine()</code> 时，就
-      能得到正确的 <code>Engine</code> 了：
+      类以及要注入的地方，这样在调用 <code>CarWithV8Engine</code> 的 <code>getEngine()</code> 时，就
+      能得到正确的 <code>IEngine</code> 了：
     </p>
     <pre>
       <code>
-        Car car = getInstance(Car.class);
-        Engine engine = car.getEngine();
-        engine.getName(); // Output: V8
+        CarWithV8Engine car = getInstance(CarWithV8Engine.class);
+        IEngine engine = car.getEngine();
+        engine.getName(); // Output: <span class="assertion" data-expect="equal" data-action="getNameOfCarWithV8Engine">V8</span>
       </code>
     </pre>
   </section>
