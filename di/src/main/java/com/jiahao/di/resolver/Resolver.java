@@ -1,7 +1,7 @@
-package com.jiahao.di.utils;
+package com.jiahao.di.resolver;
 
-import com.google.common.collect.Iterables;
 import com.jiahao.di.exceptions.CreateException;
+import com.jiahao.di.utils.Utils;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.Annotation;
@@ -46,6 +46,6 @@ public class Resolver {
       ));
     }
 
-    return Iterables.getLast(matchedClasses);
+    return matchedClasses.get(0);
   }
 }

@@ -28,24 +28,24 @@ public class Utils {
             .collect(Collectors.toList());
   }
 
-  public static boolean compareAnnotation(Annotation lhs, Annotation rhs) throws InvocationTargetException, IllegalAccessException {
+  public static boolean compareAnnotation(Annotation left, Annotation right) throws InvocationTargetException, IllegalAccessException {
 
-    if (lhs.getClass() != rhs.getClass()) {
+    if (left.getClass() != right.getClass()) {
       return false;
     }
 
-    for (Method method : lhs.annotationType().getDeclaredMethods()) {
+    for (Method method : left.annotationType().getDeclaredMethods()) {
 
-      Object lhsValue = method.invoke(lhs);
-      Object rhsValue = method.invoke(rhs);
+      Object leftValue = method.invoke(left);
+      Object rightValue = method.invoke(right);
 
-      if (lhsValue == rhsValue) {
+      if (leftValue == rightValue) {
         continue;
-      } else if (lhsValue == null) {
+      } else if (leftValue == null) {
         return false;
       }
 
-      if (!lhsValue.equals(rhsValue)) {
+      if (!leftValue.equals(rightValue)) {
         return false;
       }
     }

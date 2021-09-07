@@ -2,7 +2,7 @@ package com.jiahao.di;
 
 import com.jiahao.di.exceptions.CreateException;
 import com.jiahao.di.utils.CircularDependencyGuard;
-import com.jiahao.di.utils.Resolver;
+import com.jiahao.di.resolver.Resolver;
 import com.jiahao.di.utils.Utils;
 
 import javax.inject.Inject;
