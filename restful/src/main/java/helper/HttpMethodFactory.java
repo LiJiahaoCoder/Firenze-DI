@@ -1,4 +1,4 @@
-package server;
+package helper;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
