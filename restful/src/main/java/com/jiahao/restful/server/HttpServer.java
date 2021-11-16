@@ -1,4 +1,4 @@
-package server;
+package com.jiahao.restful.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;

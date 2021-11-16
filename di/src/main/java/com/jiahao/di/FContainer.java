@@ -41,14 +41,6 @@ public class FContainer {
     }
   }
 
-  /*public <T> List<T> getInstances(Class<T> clazz) {
-    if (!registeredClasses.contains(clazz)) {
-      throw new CreateException(clazz.getSimpleName() + " is not registered in the container.");
-    }
-
-    return List.of();
-  }*/
-
   private List<Object> getParameters(Class<?> clazz, Constructor<?> constructor) {
     guard.start(clazz);
 
