@@ -16,6 +16,7 @@ dependencies {
 
     implementation 'javax.inject:javax.inject:1'
     implementation 'com.google.guava:guava:30.0-jre'
+    implementation group: 'org.reflections', name: 'reflections', version: '0.9.12'
 }
 
 test {

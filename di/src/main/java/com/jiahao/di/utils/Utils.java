@@ -1,9 +1,9 @@
 package com.jiahao.di.utils;
 
-import com.google.common.reflect.ClassPath;
 import com.jiahao.di.exceptions.CreateException;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
 
-import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -12,20 +12,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utils {
-  public static List<String> getAllClasses(Package p) {
-    ClassPath classPath = null;
+  public static List<Class<?>> getAllClasses(Class<?> entry) {
 
-    try {
-      classPath = ClassPath.from(ClassLoader.getSystemClassLoader());
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    Reflections reflections = new Reflections(entry.getPackage().getName(), new SubTypesScanner(false));
 
-    return classPath.getAllClasses()
-            .stream()
-            .map(ClassPath.ClassInfo::getName)
-            .filter(className -> className.startsWith(p.getName()))
-            .collect(Collectors.toList());
+    return new ArrayList<>(reflections.getSubTypesOf(Object.class));
+
   }
 
   public static boolean compareAnnotation(Annotation left, Annotation right) throws InvocationTargetException, IllegalAccessException {

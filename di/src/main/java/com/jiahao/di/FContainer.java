@@ -41,6 +41,10 @@ public class FContainer {
     }
   }
 
+  public Set<Class<?>> getRegisteredClasses() {
+    return registeredClasses;
+  }
+
   private List<Object> getParameters(Class<?> clazz, Constructor<?> constructor) {
     guard.start(clazz);
 

@@ -2,3 +2,5 @@ rootProject.name = 'firenze'
 
 include 'di'
 include 'restful'
+include 'example'
+

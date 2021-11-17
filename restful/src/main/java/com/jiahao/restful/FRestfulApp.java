@@ -1,6 +1,7 @@
 package com.jiahao.restful;
 
-import com.jiahao.di.annotation.Entry;
+import com.jiahao.di.FApp;
+import com.jiahao.di.annotation.DIEntry;
 import com.jiahao.restful.annotation.RestfulEntry;
 import com.jiahao.restful.util.Utils;
 
@@ -11,21 +12,17 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class FRestfulApp {
-  private final FRestfulServer server;
-  private final Class<?> entryClass;
+  private final FApp diApp;
 
-  public FRestfulApp(Class<?> entryClass) {
-    this.server = new FRestfulServer();
-    this.entryClass = entryClass;
+  public FRestfulApp() {
+    this.diApp = new FApp(FRestfulApp.class);
   }
 
-  @Entry
-  public void start(Object... args) throws Exception {
-    List<String> classes = Utils.getAllClasses(entryClass.getPackage());
-
-    scanPackages(classes);
-
-    List<Method> methods = Arrays.stream(entryClass.getMethods())
+  @DIEntry
+  public void start(Class<?> entry) throws Exception {
+    diApp.start();
+    List<Class<?>> classes = Utils.getAllClasses(entry);
+    List<Method> methods = Arrays.stream(entry.getMethods())
             .filter(method -> Objects.nonNull(method.getDeclaredAnnotation(RestfulEntry.class)))
             .collect(Collectors.toList());
 
@@ -35,21 +32,10 @@ public class FRestfulApp {
       throw new RuntimeException("Can only exist 1 @RestfulEntry");
     }
 
-    server.run();
+    createServer().run();
   }
 
-  private List<Class> scanPackages(List<String> classNames) {
-    return classNames.stream()
-            .filter(className -> !className.startsWith("com.jiahao.restful"))
-            .map(this::getClass)
-            .collect(Collectors.toList());
-  }
-
-  private Class<?> getClass(String cls) {
-    try {
-      return Class.forName(cls);
-    } catch (ClassNotFoundException e) {
-      throw new RuntimeException("Cannot found " + cls);
-    }
+  private static FRestfulServer createServer() {
+    return new FRestfulServer();
   }
 }
