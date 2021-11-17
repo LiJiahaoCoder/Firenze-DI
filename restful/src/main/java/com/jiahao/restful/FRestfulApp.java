@@ -1,5 +1,6 @@
 package com.jiahao.restful;
 
+import com.jiahao.di.annotation.Entry;
 import com.jiahao.restful.annotation.RestfulEntry;
 import com.jiahao.restful.util.Utils;
 
@@ -18,6 +19,7 @@ public class FRestfulApp {
     this.entryClass = entryClass;
   }
 
+  @Entry
   public void start(Object... args) throws Exception {
     List<String> classes = Utils.getAllClasses(entryClass.getPackage());
 
