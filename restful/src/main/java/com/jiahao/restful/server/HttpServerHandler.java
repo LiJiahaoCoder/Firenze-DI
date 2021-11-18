@@ -9,6 +9,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
   private final Dispatcher dispatcher;
 
@@ -17,7 +19,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
   }
 
   @Override
-  protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) {
+  protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws InvocationTargetException, InstantiationException, IllegalAccessException {
     String uri = request.uri();
     HttpMethod httpMethod = request.method();
     Response responseData = new Response(dispatcher.dispatch(uri, httpMethod), HttpResponseStatus.OK);

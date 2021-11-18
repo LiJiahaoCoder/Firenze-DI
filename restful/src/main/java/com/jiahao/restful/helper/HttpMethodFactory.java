@@ -1,5 +1,7 @@
 package com.jiahao.restful.helper;
 
+import io.netty.handler.codec.http.HttpMethod;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
