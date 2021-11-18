@@ -2,13 +2,11 @@ package com.jiahao.restful.helper;
 
 import com.jiahao.restful.DIContainer;
 import com.jiahao.restful.UriTree;
-import io.netty.handler.codec.http.HttpMethod;
-import org.javatuples.Triplet;
+import org.javatuples.Quartet;
 
-import javax.ws.rs.GET;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 public class Dispatcher {
   private final UriTree uriTree;
@@ -19,16 +17,11 @@ public class Dispatcher {
     this.container = DIContainer.getContainer();
   }
 
-  public Object dispatch(String uri, HttpMethod httpMethod) throws InstantiationException, IllegalAccessException, InvocationTargetException {
-    for (Triplet<String, HttpMethod, Class<?>> triplet : uriTree.getTable()) {
-      if (triplet.getValue0().equals(uri.split("/")[1]) && triplet.getValue1().equals(httpMethod)) {
-        Class<?> clz = triplet.getValue2();
-
-        Method method = Arrays.stream(clz
-                .getMethods())
-                .filter(m -> m.isAnnotationPresent(GET.class))
-                .findFirst()
-                .get();
+  public Object dispatch(String uri, Class<? extends Annotation> httpMethod) throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    for (Quartet<String, Class<? extends Annotation>, Method, Class<?>> quartet : uriTree.getTable()) {
+      if (quartet.getValue0().equals(uri.split("/")[1]) && quartet.getValue1().equals(httpMethod)) {
+        Method method = quartet.getValue2();
+        Class<?> clz = quartet.getValue3();
 
         return method.invoke(container.getInstance(clz));
       }

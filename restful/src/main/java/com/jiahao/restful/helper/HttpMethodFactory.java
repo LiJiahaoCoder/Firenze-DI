@@ -10,14 +10,16 @@ import java.lang.annotation.Annotation;
 import java.util.Map;
 
 public class HttpMethodFactory {
-  private static final Map<Class<? extends Annotation>, HttpMethod> METHOD_MAP = Map.of(
-          GET.class, HttpMethod.GET,
-          PUT.class, HttpMethod.PUT,
-          POST.class, HttpMethod.POST,
-          DELETE.class, HttpMethod.DELETE
+
+  private static final Map<HttpMethod, Class<? extends Annotation>> METHOD_MAP = Map.of(
+          HttpMethod.GET, GET.class,
+          HttpMethod.PUT, PUT.class,
+          HttpMethod.POST, POST.class,
+          HttpMethod.DELETE, DELETE.class
   );
 
-  public static HttpMethod getMethod(Class<? extends Annotation> methodAnnotation) {
-    return METHOD_MAP.get(methodAnnotation);
+  public static Class<? extends Annotation> getMethod(HttpMethod httpMethod) {
+    return METHOD_MAP.get(httpMethod);
   }
+
 }

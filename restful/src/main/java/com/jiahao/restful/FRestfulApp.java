@@ -2,11 +2,8 @@ package com.jiahao.restful;
 
 import com.jiahao.di.annotation.DIEntry;
 import com.jiahao.restful.annotation.RestfulEntry;
-import com.jiahao.restful.util.Utils;
-import io.netty.handler.codec.http.HttpMethod;
-import org.javatuples.Triplet;
+import com.jiahao.restful.helper.Register;
 
-import javax.ws.rs.Path;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
@@ -14,10 +11,16 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class FRestfulApp {
+  private final Register register;
+
+  public FRestfulApp() {
+    this.register = new Register();
+  }
+
   @DIEntry
   public void start(Class<?> entry) throws Exception {
     DIContainer.initContainer(entry);
-    registerResource(entry);
+    register(entry);
     List<Method> methods = Arrays.stream(entry.getMethods())
             .filter(method -> Objects.nonNull(method.getDeclaredAnnotation(RestfulEntry.class)))
             .collect(Collectors.toList());
@@ -31,15 +34,8 @@ public class FRestfulApp {
     createServer().run();
   }
 
-  private void registerResource(Class entry) {
-    UriTree uriTree = UriTree.getInstance();
-    List<Class<?>> classes = Utils.getAllClasses(entry)
-            .stream()
-            .filter(clz -> clz.isAnnotationPresent(Path.class))
-            .collect(Collectors.toList());
-    for (Class<?> clz : classes) {
-      uriTree.add(new Triplet<String, HttpMethod, Class<?>>(clz.getAnnotation(Path.class).value(), HttpMethod.GET, clz));
-    }
+  private void register(Class<?> entry) {
+    register.register(entry);
   }
 
   private static FRestfulServer createServer() {

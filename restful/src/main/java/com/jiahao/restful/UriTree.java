@@ -1,19 +1,20 @@
 package com.jiahao.restful;
 
-import io.netty.handler.codec.http.HttpMethod;
-import org.javatuples.Triplet;
+import org.javatuples.Quartet;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class UriTree {
 
-  private final ArrayList<Triplet<String, HttpMethod, Class<?>>> table;
+  private final ArrayList<Quartet<String, Class<? extends Annotation>, Method, Class<?>>> table;
 
   private static UriTree uriTree;
 
-  private UriTree(ArrayList<Triplet<String, HttpMethod, Class<?>>> table) {
+  private UriTree(ArrayList<Quartet<String, Class<? extends Annotation>, Method, Class<?>>> table) {
     this.table = table;
   }
 
@@ -24,15 +25,15 @@ public class UriTree {
     return uriTree;
   }
 
-  public List<Triplet<String, HttpMethod, Class<?>>> getTable() {
+  public List<Quartet<String, Class<? extends Annotation>, Method, Class<?>>> getTable() {
     return table;
   }
 
-  public void add(Triplet<String, HttpMethod, Class<?>> value) {
+  public void add(Quartet<String, Class<? extends Annotation>, Method, Class<?>> value) {
     table.add(value);
   }
 
-  public Triplet<String, HttpMethod, Class<?>> get(int index) {
+  public Quartet<String, Class<? extends Annotation>, Method, Class<?>> get(int index) {
     return table.get(index);
   }
 }

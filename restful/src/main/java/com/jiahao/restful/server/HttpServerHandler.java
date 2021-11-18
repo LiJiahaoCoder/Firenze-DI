@@ -1,6 +1,7 @@
 package com.jiahao.restful.server;
 
 import com.jiahao.restful.helper.Dispatcher;
+import com.jiahao.restful.helper.HttpMethodFactory;
 import com.jiahao.restful.helper.Serializer;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -22,7 +23,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
   protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws InvocationTargetException, InstantiationException, IllegalAccessException {
     String uri = request.uri();
     HttpMethod httpMethod = request.method();
-    Response responseData = new Response(dispatcher.dispatch(uri, httpMethod), HttpResponseStatus.OK);
+    Response responseData = new Response(dispatcher.dispatch(uri, HttpMethodFactory.getMethod(httpMethod)), HttpResponseStatus.OK);
 
     FullHttpResponse response = new DefaultFullHttpResponse(
             HttpVersion.HTTP_1_1,
