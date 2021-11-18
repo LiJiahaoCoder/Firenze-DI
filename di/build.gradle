@@ -14,7 +14,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     testImplementation 'io.github.thxno:fusheng-runner:1.0'
 
-    implementation 'javax.inject:javax.inject:1'
+    compile 'javax.inject:javax.inject:1'
     implementation 'com.google.guava:guava:30.0-jre'
     implementation group: 'org.reflections', name: 'reflections', version: '0.9.12'
 }
