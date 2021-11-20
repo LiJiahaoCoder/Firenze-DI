@@ -12,8 +12,8 @@ public class Response {
     this.status = status.code();
   }
 
-  public Response(Number status, String errorMessage) {
-    this.status = status;
+  public Response(String errorMessage, HttpResponseStatus status) {
+    this.status = status.code();
     this.errorMessage = errorMessage;
   }
 }
