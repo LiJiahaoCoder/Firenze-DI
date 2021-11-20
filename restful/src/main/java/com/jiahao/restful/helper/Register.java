@@ -3,7 +3,6 @@ package com.jiahao.restful.helper;
 import com.jiahao.restful.UriTree;
 import com.jiahao.restful.util.Utils;
 import org.javatuples.Quartet;
-import org.javatuples.Triplet;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -13,6 +12,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 public class Register {
+
+  private List<Class<? extends Annotation>> httpAnnotations = List.of(GET.class, POST.class);
 
   public void register(Class<?> entry) {
     registerResource(Utils.getAllClasses(entry));
@@ -49,8 +50,7 @@ public class Register {
   }
 
   private boolean isHttpMethodAnnotation(Annotation annotation) {
-    return GET.class.equals(annotation.annotationType()) ||
-            POST.class.equals(annotation.annotationType());
+    return httpAnnotations.contains(annotation.annotationType());
   }
 
 }
