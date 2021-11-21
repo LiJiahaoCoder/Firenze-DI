@@ -13,7 +13,7 @@ public class UriHelper {
   }
 
   public static boolean match(String uri, String target) {
-    String regex = target.replaceAll("\\{\\w+\\}", "([^/]+)");
+    String regex = target.replaceAll("\\{\\w+\\}", "(\\\\w+)");
     return uri.matches(regex);
   }
 
