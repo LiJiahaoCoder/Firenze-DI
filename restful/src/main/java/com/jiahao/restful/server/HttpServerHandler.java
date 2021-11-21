@@ -1,8 +1,7 @@
 package com.jiahao.restful.server;
 
 import com.jiahao.restful.helper.Dispatcher;
-import com.jiahao.restful.helper.HttpMethodFactory;
-import com.jiahao.restful.helper.Serializer;
+import com.jiahao.restful.util.Utils;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -11,7 +10,6 @@ import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Objects;
 
 public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
   private final Dispatcher dispatcher;
@@ -21,25 +19,24 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
   }
 
   @Override
-  protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+  protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws InvocationTargetException, IllegalAccessException {
     String uri = request.uri();
     HttpMethod httpMethod = request.method();
-    Object result = dispatcher.dispatch(uri, HttpMethodFactory.getMethod(httpMethod));
 
-    Response responseData;
-    HttpResponseStatus status;
-    if (Objects.isNull(result)) {
+    Response responseData = null;
+    HttpResponseStatus status = HttpResponseStatus.OK;
+    try {
+      Object result = dispatcher.dispatch(uri, HttpMethodFactory.getMethod(httpMethod));
+      responseData = new Response(result, status);
+    } catch (RuntimeException exception) {
       status = HttpResponseStatus.NOT_FOUND;
       responseData = new Response("Cannot found request uri: " + uri, status);
-    } else {
-      status = HttpResponseStatus.OK;
-      responseData = new Response(result, status);
     }
 
     FullHttpResponse response = new DefaultFullHttpResponse(
             HttpVersion.HTTP_1_1,
             status,
-            Unpooled.copiedBuffer(Serializer.serialize(responseData), CharsetUtil.UTF_8)
+            Unpooled.copiedBuffer(Utils.serialize(responseData), CharsetUtil.UTF_8)
     );
     response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json");
     ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);

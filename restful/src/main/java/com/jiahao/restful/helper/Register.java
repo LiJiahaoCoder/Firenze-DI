@@ -1,6 +1,6 @@
 package com.jiahao.restful.helper;
 
-import com.jiahao.restful.UriTree;
+import com.jiahao.restful.UriTable;
 import com.jiahao.restful.util.Utils;
 import org.javatuples.Quartet;
 
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Register {
 
-  private List<Class<? extends Annotation>> httpAnnotations = List.of(GET.class, POST.class);
+  private final List<Class<? extends Annotation>> httpAnnotations = List.of(GET.class, POST.class);
 
   public void register(Class<?> entry) {
     registerResource(Utils.getAllClasses(entry));
@@ -27,7 +27,7 @@ public class Register {
 
   private void registerMethod(Class<?> resource) {
     String path = resource.getAnnotation(Path.class).value();
-    UriTree uriTree = UriTree.getInstance();
+    UriTable uriTable = UriTable.getUriTable();
     Method[] methods = resource.getMethods();
 
     for (Method method : methods) {
@@ -37,8 +37,13 @@ public class Register {
 
         if (isHttpMethodAnnotation(annotation)) {
 
-          Quartet<String, Class<? extends Annotation>, Method, Class<?>> quartet = new Quartet<>(path, annotation.annotationType(), method, resource);
-          uriTree.add(quartet);
+          Quartet<String, Class<? extends Annotation>, Method, Class<?>> quartet = new Quartet<>(
+                  UriResolver.resolve(path),
+                  annotation.annotationType(),
+                  method,
+                  resource
+          );
+          uriTable.add(quartet);
           break;
 
         }

@@ -8,21 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class UriTree {
+public class UriTable {
 
   private final ArrayList<Quartet<String, Class<? extends Annotation>, Method, Class<?>>> table;
 
-  private static UriTree uriTree;
+  private static UriTable uriTable;
 
-  private UriTree(ArrayList<Quartet<String, Class<? extends Annotation>, Method, Class<?>>> table) {
+  private UriTable(ArrayList<Quartet<String, Class<? extends Annotation>, Method, Class<?>>> table) {
     this.table = table;
   }
 
-  public static UriTree getInstance() {
-    if (Objects.isNull(uriTree)) {
-      uriTree = new UriTree(new ArrayList());
+  public static UriTable getUriTable() {
+    if (Objects.isNull(uriTable)) {
+      uriTable = new UriTable(new ArrayList());
     }
-    return uriTree;
+    return uriTable;
   }
 
   public List<Quartet<String, Class<? extends Annotation>, Method, Class<?>>> getTable() {
