@@ -20,7 +20,7 @@ public class Dispatcher {
   }
 
   public Object dispatch(String uri, Class<? extends Annotation> httpMethod, String dataString) throws IllegalAccessException, InvocationTargetException {
-    String targetUri = UriResolver.resolve(uri);
+    String targetUri = UriHelper.normalize(uri);
 
     Quartet<String, Class<? extends Annotation>, Method, Class<?>> quartet = uriChecker(targetUri, httpMethod);
 
@@ -43,7 +43,7 @@ public class Dispatcher {
     for (Quartet<String, Class<? extends Annotation>, Method, Class<?>> quartet : uriTable.getTable()) {
       if (
               targetUri.equals(quartet.getValue0()) &&
-                      httpMethod.equals(quartet.getValue1())
+              httpMethod.equals(quartet.getValue1())
       ) {
         return quartet;
       }

@@ -18,8 +18,8 @@ public class StudentsResource {
   }
 
   private void initializeStudents() {
-    studentsService.addStudent(new Student("Bill"));
-    studentsService.addStudent(new Student("George"));
+    studentsService.addStudent(new Student("1", "Bill"));
+    studentsService.addStudent(new Student("2", "George"));
   }
 
   @GET

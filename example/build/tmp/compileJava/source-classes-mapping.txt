@@ -1,10 +1,10 @@
-main/model/Student.java
- main.model.Student
-main/resource/StudentResource.java
- main.resource.StudentResource
-main/service/StudentsService.java
- main.service.StudentsService
 main/resource/StudentsResource.java
  main.resource.StudentsResource
+main/resource/StudentResource.java
+ main.resource.StudentResource
 main/Main.java
  main.Main
+main/model/Student.java
+ main.model.Student
+main/service/StudentsService.java
+ main.service.StudentsService

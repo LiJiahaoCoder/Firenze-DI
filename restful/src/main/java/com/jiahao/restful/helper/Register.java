@@ -43,7 +43,7 @@ public class Register {
             registerResource(List.of(method.getReturnType()), getSubPath(path, method.getAnnotation(Path.class)), true);
           } else {
             Quartet<String, Class<? extends Annotation>, Method, Class<?>> quartet = new Quartet<>(
-                    UriResolver.resolve(path),
+                    UriHelper.normalize(path),
                     annotation.annotationType(),
                     method,
                     resource
@@ -67,7 +67,7 @@ public class Register {
   }
 
   private String getSubPath(String path, Path annotation) {
-    return UriResolver.resolve(path + "/" + UriResolver.resolve(annotation.value()));
+    return UriHelper.normalize(path + "/" + UriHelper.normalize(annotation.value()));
   }
 
 }
