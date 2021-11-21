@@ -22,4 +22,10 @@ public class Utils {
     return new Gson().toJson(responseData);
 
   }
+
+  public static Object deserialize(String rawData, Class<?> target) {
+
+    return new Gson().fromJson(rawData, target);
+
+  }
 }

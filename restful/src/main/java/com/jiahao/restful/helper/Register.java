@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Register {
 
-  private final List<Class<? extends Annotation>> httpAnnotations = List.of(GET.class, POST.class);
+  private final static List<Class<? extends Annotation>> httpAnnotations = List.of(GET.class, POST.class);
 
   public void register(Class<?> entry) {
     registerResource(Utils.getAllClasses(entry));
@@ -43,7 +43,9 @@ public class Register {
                   method,
                   resource
           );
+
           uriTable.add(quartet);
+
           break;
 
         }

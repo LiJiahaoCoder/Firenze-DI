@@ -10,6 +10,7 @@ import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
 
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.StandardCharsets;
 
 public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
   private final Dispatcher dispatcher;
@@ -21,12 +22,14 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
   @Override
   protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws InvocationTargetException, IllegalAccessException {
     String uri = request.uri();
+    String dataString = request.content().toString(StandardCharsets.UTF_8);
     HttpMethod httpMethod = request.method();
 
     Response responseData = null;
     HttpResponseStatus status = HttpResponseStatus.OK;
+
     try {
-      Object result = dispatcher.dispatch(uri, HttpMethodFactory.getMethod(httpMethod));
+      Object result = dispatcher.dispatch(uri, HttpMethodFactory.getMethod(httpMethod), dataString);
       responseData = new Response(result, status);
     } catch (RuntimeException exception) {
       status = HttpResponseStatus.NOT_FOUND;

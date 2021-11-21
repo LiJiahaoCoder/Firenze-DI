@@ -4,9 +4,7 @@ import main.model.Student;
 import main.service.StudentsService;
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import java.util.List;
 
 @Path("students")
@@ -27,6 +25,11 @@ public class StudentsResource {
   @GET
   public List<Student> getStudents() {
     return studentsService.getStudents();
+  }
+
+  @POST
+  public void addStudent(@BeanParam Student student) {
+    studentsService.addStudent(student);
   }
 
   @Path("{id}")
