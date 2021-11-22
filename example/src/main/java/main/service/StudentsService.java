@@ -10,7 +10,7 @@ public class StudentsService {
   private final ArrayList<Student> students;
 
   public StudentsService() {
-    this.students = new ArrayList<Student>();
+    this.students = new ArrayList<>();
     initializeStudents();
   }
 
@@ -23,8 +23,11 @@ public class StudentsService {
     return this.students;
   }
 
-  public Student getStudent(Integer id) {
-    return this.students.get(id);
+  public Student getStudent(String id) {
+    return this.students.stream()
+            .filter(student -> student.getId().equals(id))
+            .findFirst()
+            .get();
   }
 
   public void addStudent(Student student) {

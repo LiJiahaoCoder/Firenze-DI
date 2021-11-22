@@ -27,7 +27,7 @@ public class StudentsResource {
   }
 
   @Path("{id}")
-  public StudentResource findStudent(@PathParam("id") Integer id) {
+  public StudentResource findStudent(@PathParam("id") String id) {
     return new StudentResource(studentsService.getStudent(id));
   }
 }

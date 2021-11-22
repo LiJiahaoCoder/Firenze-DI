@@ -2,8 +2,6 @@ package com.jiahao.restful.helper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class UriHelper {
   public static String normalize(String uri) {
@@ -13,7 +11,7 @@ public class UriHelper {
     return result;
   }
 
-  private static boolean isPathParam(String target) {
+  public static boolean isPathParam(String target) {
     return target.matches("\\{\\w+\\}");
   }
 
