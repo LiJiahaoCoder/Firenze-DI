@@ -2,13 +2,21 @@ package main.service;
 
 import main.model.Student;
 
+import javax.inject.Singleton;
 import java.util.ArrayList;
 
+@Singleton
 public class StudentsService {
   private final ArrayList<Student> students;
 
   public StudentsService() {
     this.students = new ArrayList<Student>();
+    initializeStudents();
+  }
+
+  private void initializeStudents() {
+    students.add(new Student("1", "Bill"));
+    students.add(new Student("2", "George"));
   }
 
   public ArrayList<Student> getStudents() {

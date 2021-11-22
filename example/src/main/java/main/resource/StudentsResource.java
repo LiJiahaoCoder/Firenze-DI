@@ -14,12 +14,6 @@ public class StudentsResource {
   @Inject
   public StudentsResource(StudentsService studentsService) {
     this.studentsService = studentsService;
-    initializeStudents();
-  }
-
-  private void initializeStudents() {
-    studentsService.addStudent(new Student("1", "Bill"));
-    studentsService.addStudent(new Student("2", "George"));
   }
 
   @GET
