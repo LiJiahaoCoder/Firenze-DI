@@ -24,7 +24,7 @@ public class UriHelper {
     return uri.matches(regex);
   }
 
-  public static List<String> parse(String uri, String target) {
+  public static String[] parse(String uri, String target) {
     String[] splitUri = uri.split("/");
     String[] splitTarget = target.split("/");
     List<String> result = new ArrayList<>();
@@ -35,6 +35,6 @@ public class UriHelper {
       }
     }
 
-    return result;
+    return result.toArray(String[]::new);
   }
 }

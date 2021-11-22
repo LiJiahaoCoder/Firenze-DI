@@ -21,7 +21,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 
   @Override
   protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws InvocationTargetException, IllegalAccessException {
-    String uri = request.uri();
+    String uri = request.uri().split("\\?")[0];
     String dataString = request.content().toString(StandardCharsets.UTF_8);
     HttpMethod httpMethod = request.method();
 
@@ -32,6 +32,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
       Object result = dispatcher.dispatch(uri, HttpMethodFactory.getMethod(httpMethod), dataString);
       responseData = new Response(result, status);
     } catch (RuntimeException exception) {
+      exception.printStackTrace();
       status = HttpResponseStatus.NOT_FOUND;
       responseData = new Response("Cannot found request uri: " + uri, status);
     }

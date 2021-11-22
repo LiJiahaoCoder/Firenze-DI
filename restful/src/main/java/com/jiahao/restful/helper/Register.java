@@ -32,7 +32,7 @@ public class Register {
     UriTable uriTable = UriTable.getUriTable();
     Method[] methods = resource.getMethods();
 
-    for (Method method : methods) {
+    /*for (Method method : methods) {
       Annotation[] annotations = method.getAnnotations();
 
       for (Annotation annotation : annotations) {
@@ -58,11 +58,45 @@ public class Register {
 
       }
 
+    }*/
+
+    for (Method method : methods) {
+
+      handleMethod(resource, path, uriTable, method);
+
     }
 
   }
 
-  private boolean isHttpMethodAnnotation(Annotation annotation) {
+  private void handleMethod(Class<?> resource, String path, UriTable uriTable, Method method) {
+    Annotation[] annotations = method.getAnnotations();
+
+    for (Annotation annotation : annotations) {
+
+      if (isHttpMethodAnnotation(annotation)) {
+
+        String targetPath = path;
+        if (method.isAnnotationPresent(Path.class)) {
+          targetPath = getSubPath(targetPath, method.getAnnotation(Path.class));
+        }
+
+        Quartet<String, Class<? extends Annotation>, Method, Class<?>> quartet = new Quartet<>(
+                targetPath,
+                annotation.annotationType(),
+                method,
+                resource
+        );
+
+        uriTable.add(quartet);
+
+        break;
+
+      }
+
+    }
+  }
+
+  public static boolean isHttpMethodAnnotation(Annotation annotation) {
     return httpAnnotations.contains(annotation.annotationType());
   }
 

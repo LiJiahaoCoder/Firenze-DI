@@ -4,7 +4,7 @@ main/resource/StudentResource.java
  main.resource.StudentResource
 main/resource/StudentsResource.java
  main.resource.StudentsResource
-main/Main.java
- main.Main
 main/service/StudentsService.java
  main.service.StudentsService
+main/Main.java
+ main.Main

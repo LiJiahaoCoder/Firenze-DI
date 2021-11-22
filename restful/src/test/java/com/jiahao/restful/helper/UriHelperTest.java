@@ -2,8 +2,6 @@ package com.jiahao.restful.helper;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class UriHelperTest {
@@ -52,15 +50,16 @@ class UriHelperTest {
 
   @Test
   void should_get_uri_when_parse_given_single_param_in_path() {
-    List<String> parse = UriHelper.parse("/students/1", "/students/{id}");
+    Object[] parse = UriHelper.parse("/students/1", "/students/{id}");
 
-    assertEquals(List.of("1"), parse);
+    assertEquals("1", parse[0]);
   }
 
   @Test
   void should_get_uri_when_parse_given_two_params_in_path() {
-    List<String> parse = UriHelper.parse("/students/1/details/2", "/students/{id}/details/{chapter}");
+    Object[] parse = UriHelper.parse("/students/1/details/2", "/students/{id}/details/{chapter}");
 
-    assertEquals(List.of("1", "2"), parse);
+    assertEquals("1", parse[0]);
+    assertEquals("2", parse[1]);
   }
 }
