@@ -27,22 +27,32 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 
     Response responseData = null;
     HttpResponseStatus status = HttpResponseStatus.OK;
+    FullHttpResponse response = null;
 
-    try {
-      Object result = dispatcher.dispatch(uri, HttpMethodFactory.getMethod(httpMethod), dataString);
-      responseData = new Response(result, status);
-    } catch (RuntimeException exception) {
-      exception.printStackTrace();
-      status = HttpResponseStatus.NOT_FOUND;
-      responseData = new Response("Cannot found request uri: " + uri, status);
+    if (httpMethod.equals(HttpMethod.OPTIONS)) {
+      response = new DefaultFullHttpResponse(
+              HttpVersion.HTTP_1_1,
+              status
+      );
+    } else {
+      try {
+        Object result = dispatcher.dispatch(uri, HttpMethodFactory.getMethod(httpMethod), dataString);
+        responseData = new Response(result, status);
+      } catch (RuntimeException exception) {
+        exception.printStackTrace();
+        status = HttpResponseStatus.NOT_FOUND;
+        responseData = new Response("Cannot found request uri: " + uri, status);
+      }
+
+      response = new DefaultFullHttpResponse(
+              HttpVersion.HTTP_1_1,
+              status,
+              Unpooled.copiedBuffer(Utils.serialize(responseData), CharsetUtil.UTF_8)
+      );
     }
 
-    FullHttpResponse response = new DefaultFullHttpResponse(
-            HttpVersion.HTTP_1_1,
-            status,
-            Unpooled.copiedBuffer(Utils.serialize(responseData), CharsetUtil.UTF_8)
-    );
     response.headers().set(HttpHeaderNames.CONTENT_TYPE, "application/json");
+    response.headers().set(HttpHeaderNames.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
     ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
   }
 }

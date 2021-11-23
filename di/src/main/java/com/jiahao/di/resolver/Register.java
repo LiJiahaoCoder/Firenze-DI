@@ -1,8 +1,6 @@
 package com.jiahao.di.resolver;
 
-import javax.inject.Singleton;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 public class Register {

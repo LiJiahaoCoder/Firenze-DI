@@ -97,7 +97,7 @@ public class Dispatcher {
 
         if (isPathClass(method)) {
           return quartet;
-        } else if (httpMethod.equals(method)) {
+        } else if (method.equals(httpMethod)) {
           return quartet;
         }
 
